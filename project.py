@@ -9,11 +9,12 @@ g = Graph("0")
 with open("input.txt", "r") as f:
 	line = f.readline()
 	nDomains = int(line)
-	line = f.readline()
-	pagesPerDomain = int(line)
 
+	pages = []
 	for i in range(nDomains):
-		for j in range(pagesPerDomain):
+		line = f.readline()
+		pages.append(int(line))
+		for j in range(pages[i]):
 			g.add_node(Node(str(i) + "-" + str(j)))
 
 	edges = []
@@ -38,13 +39,12 @@ g2 = Graph("main")
 with open("input.txt", "r") as f:
 	line = f.readline()
 	nDomains = int(line)
-	line = f.readline()
-	pagesPerDomain = int(line)
 
 	for i in range(nDomains):
 		tmp = Graph(str(i))
 		g2.add_node(tmp)
-		for j in range(pagesPerDomain):
+		line = f.readline()
+		for j in range(pages[i]):
 			tmp.add_node(Node(str(i) + "-" + str(j)))
 
 	edges = []
@@ -70,7 +70,7 @@ order1 = sorted(ranks1, key=ranks1.get)
 order2 = sorted(ranks2, key=ranks2.get)
 nodes = []
 for i in range(nDomains):
-	for j in range(pagesPerDomain):
+	for j in range(pages[i]):
 		nodes.append(str(i) + "-" + str(j))
 numerator = 0
 denominator = len(nodes) * (len(nodes) - 1)
@@ -86,9 +86,11 @@ for i in nodes:
 print("distance of orderings: " + str(numerator / denominator))
 
 # perform one hundred updates on each graph and compare the time took
-start = time()
+'''start = time()
 for i in range(100):
-	g.add_edge(str(randint(0, nDomains - 1)) + "-" + str(randint(0, pagesPerDomain - 1)), str(randint(0, nDomains - 1)) + "-" + str(randint(0, pagesPerDomain - 1)))
+	s = randint(0, nDomains - 1)
+	d = randint(0, nDomains - 1)
+	g.add_edge(str(s) + "-" + str(randint(0, pages[s] - 1)), str(d) + "-" + str(randint(0, pages[d] - 1)))
 	g.calc_ranks()
 end = time()
 print("updating time 1: " + str(end - start) + "s")
@@ -96,9 +98,11 @@ print("updating time 1: " + str(end - start) + "s")
 start = time()
 for i in range(100):
 	if random() < 0.8:
-		domain = str(randint(0, nDomains - 1))
-		g2.add_and_update(domain + "-" + str(randint(0, pagesPerDomain - 1)), domain + "-" + str(randint(0, pagesPerDomain - 1)))
+		domain = randint(0, nDomains - 1)
+		g2.add_and_update(str(domain) + "-" + str(randint(0, pages[domain] - 1)), str(domain) + "-" + str(randint(0, pages[domain] - 1)))
 	else:
-		g2.add_and_update(str(randint(0, nDomains - 1)) + "-" + str(randint(0, pagesPerDomain - 1)), str(randint(0, nDomains - 1)) + "-" + str(randint(0, pagesPerDomain - 1)))
+		s = randint(0, nDomains - 1)
+		d = randint(0, nDomains - 1)
+		g2.add_and_update(str(s) + "-" + str(randint(0, pages[s] - 1)), str(d) + "-" + str(randint(0, pages[d] - 1)))
 end = time()
-print("updating time 2: " + str(end - start) + "s")
+print("updating time 2: " + str(end - start) + "s")'''
